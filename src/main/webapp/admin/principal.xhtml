@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Cadastro de Usuários</title>
+	<link href="../resources/bootstrap-3.3.7/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<link href="../resources/css/style.css" rel="stylesheet" type="text/css" />
+</h:head>
+<h:body>
+	
+	<h:form>
+	
+		<p:growl life="4000"/> 
+		<h:commandLink class="btn btn-info" style="margin-left:89%;margin-top:2%;margin-bottom:-8%;" icon="ui-icon-arrowreturn-1-w" action="#{usuarioBean.novo}"> + Novo
+		</h:commandLink>
+		<h1>Cadastro de Usuários</h1>
+		<p:dataTable value="#{usuarioBean.lista}" selectionMode="single" rowKey="#{usuario.codigo}" var="usuario" rules="rows"
+			cellpadding="1" paginator="true" paginatorPosition="bottom" rows="20" 
+                         rowsPerPageTemplate="5,10,15" >
+                         
+			<f:facet name="caption"> 
+				A listagem a seguir exibe a relação de todos os usuários do sistema. Você poderá realizar ativação e desativação, edição e exclusão para os usuários.
+			</f:facet>
+			<f:facet name="header">
+			<p:commandButton style="margin-right:80%;" action="#{usuarioBean.voltar()}" icon="ui-icon-arrowreturn-1-w" value="Voltar para pagina principal"/>
+			
+			</f:facet>
+			
+			<f:facet name="footer">
+			N° Usuários cadastrados (#{usuarioBean.lista.size()})
+			</f:facet>
+			
+			<p:column style="width:50px;">
+			<f:facet name="header">Ativo</f:facet>
+				<h:commandLink action="#{usuarioBean.ativar}">
+					<h:graphicImage library="imagens"
+						name="usuario_ativo_#{usuario.ativo}.png" style="border:0" />
+					<f:setPropertyActionListener target="#{usuarioBean.usuario}"
+						value="#{usuario}" />
+				</h:commandLink>
+			</p:column>
+			<p:column style="width:65px;">
+			<f:facet name="header">Idioma</f:facet>
+				<h:graphicImage library="imagens" style="margin-left:12px;"
+					name="bandeira_#{usuario.idioma}.png" />
+			</p:column>
+			<p:column filterBy="#{usuario.nome}">
+				<f:facet name="header">Nome</f:facet>
+			<h:outputText value="#{usuario.nome}" />
+		</p:column>
+			<p:column>
+				<f:facet name="header">e-Mail</f:facet>
+				<a href="mailto:#{usuario.email}">#{usuario.email}</a>
+			</p:column>
+			
+			<p:column style="width:15%;">
+				<f:facet name="header" >Celular</f:facet>
+				<h:outputText value="#{usuario.celular}" style="margin-left:20px;"/>
+			</p:column>
+			
+			<p:column style="width:70px;">
+			<f:facet name="header">Editar</f:facet>
+				<h:commandLink action="#{usuarioBean.editar}" style="margin-left:18px;">
+					<span class="glyphicon glyphicon-pencil" style="color: green;" ></span>
+					<f:setPropertyActionListener target="#{usuarioBean.usuario}"
+						value="#{usuario}" />
+					<f:setPropertyActionListener target="#{usuarioBean.destinoSalvar}"
+						value="/admin/principal" />
+				</h:commandLink>
+				</p:column>
+				<p:column style="width:70px;">
+				<f:facet name="header">Excluir</f:facet>
+				<p:commandLink action="#{usuarioBean.excluir}" update="@form" style="margin-left:18px;">
+					<p:confirm header="Confirmação" message="voçê tem certeza?" icon="ui-icon-alert"/>
+						<span class="glyphicon glyphicon-trash" style="color: red;" ></span>
+						<f:setPropertyActionListener target="#{usuarioBean.usuario}"
+						value="#{usuario}" />
+				</p:commandLink>
+				
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+    </p:confirmDialog>
+			</p:column>
+			
+			
+			<p:column style="width:100px;">
+				<f:facet name="header">Permissões</f:facet>
+				<h:commandLink
+					action="#{usuarioBean.atribuiPermissao(usuario, 'ROLE_ADMINISTRADOR')}"
+					title="Permissão Administrador">
+					<h:graphicImage library="imagens"
+						name="ROLE_ADMINISTRADOR_#{usuario.permissao.contains('ROLE_ADMINISTRADOR')}.png"
+						style="border:0;margin-left:30%;width:15px;" />
+				</h:commandLink>
+				<h:commandLink 
+					action="#{usuarioBean.atribuiPermissao(usuario, 'ROLE_USUARIO_VIP')}"
+					title="Permissão Usuário VIP">
+					<h:graphicImage library="imagens" 
+						name="ROLE_USUARIO_VIP_#{usuario.permissao.contains('ROLE_USUARIO_VIP')}.png"
+						style="border:0;width:15px;margin-left:8px;" />
+				</h:commandLink>
+			</p:column>
+			
+		</p:dataTable>
+	</h:form>
+	
+	<script type="text/javascript" src="./resources/js/bootstrap.bundle.min.js"/>
+</h:body>
+</html>

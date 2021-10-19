@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:bean id="messageSource"  class="org.springframework.context.support.ResourceBundleMessageSource">
+        <beans:property  name="basenames">
+            <beans:list>
+            <beans:value>messages</beans:value>
+            </beans:list>
+          </beans:property>
+       </beans:bean>
